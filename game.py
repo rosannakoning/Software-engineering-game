@@ -44,14 +44,18 @@ while running:
         falling_objects.append(spawn_object(screen_width))
         spawn_timer = 0
 
-    for obj in falling_objects[:]:
-        obj.update()
+  for obj in falling_objects[:]:
+    obj.update()
 
-        if obj.get_rect().colliderect(basket):
-            score += obj.points
+    if not obj.exploded and obj.get_rect().colliderect(basket):
+        score += obj.points
+        if obj.object_type == "bomb":
+            obj.explode()
+        else:
             falling_objects.remove(obj)
-        elif obj.is_off_screen(screen_height):
-            falling_objects.remove(obj)
+
+    elif obj.is_finished(screen_height):
+        falling_objects.remove(obj)
 
     screen.fill((0, 0, 0))
 
