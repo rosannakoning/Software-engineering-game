@@ -1,5 +1,5 @@
 import pygame
-from objects import FallingObject, spawn_object
+from objects import spawn_object
 
 pygame.init()
 
@@ -17,7 +17,6 @@ falling_objects = []
 spawn_timer = 0
 spawn_delay = 40
 
-score = 0
 font = pygame.font.SysFont(None, 36)
 
 running = True
@@ -44,18 +43,13 @@ while running:
         falling_objects.append(spawn_object(screen_width))
         spawn_timer = 0
 
-  for obj in falling_objects[:]:
-    obj.update()
+    for obj in falling_objects[:]:
+        obj.update()
 
-    if not obj.exploded and obj.get_rect().colliderect(basket):
-        score += obj.points
-        if obj.object_type == "bomb":
-            obj.explode()
-        else:
+        if obj.get_rect().colliderect(basket):
             falling_objects.remove(obj)
-
-    elif obj.is_finished(screen_height):
-        falling_objects.remove(obj)
+        elif obj.is_off_screen(screen_height):
+            falling_objects.remove(obj)
 
     screen.fill((0, 0, 0))
 
@@ -64,9 +58,6 @@ while running:
     for obj in falling_objects:
         obj.draw(screen)
 
-    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
-    screen.blit(score_text, (20, 20))
-
-    pygame.display.update()
+    pygame.display.flip()
 
 pygame.quit()
