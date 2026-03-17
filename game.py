@@ -4,16 +4,16 @@ from objects import spawn_object
 pygame.init()
 
 ## sounds 
-catch_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/fallingsounds.wav")
+catch_sound = pygame.mixer.Sound("sounds/fallingsounds.wav")
 catch_sound.set_volume(0.5)
 
-missing_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/error.wav")
+missing_sound = pygame.mixer.Sound("sounds/error.wav")
 missing_sound.set_volume(0.8)
 
-start_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/button.wav")
+start_sound = pygame.mixer.Sound("sounds/button.wav")
 start_sound.set_volume(0.5)
 
-background_song = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/backgroundsong.wav")
+background_song = pygame.mixer.Sound("sounds/backgroundsong.wav")
 background_song.set_volume(0.05)
 
 
