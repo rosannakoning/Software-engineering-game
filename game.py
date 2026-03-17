@@ -3,6 +3,7 @@ from objects import spawn_object
 
 pygame.init()
 
+# Scherm instellingen
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -10,6 +11,7 @@ pygame.display.set_caption("Fruit Catch Game")
 
 clock = pygame.time.Clock()
 
+# --- JOUW TAAK: DE SPELER ---
 basket = pygame.Rect(350, 530, 100, 40)
 basket_speed = 7
 
@@ -27,19 +29,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # DE BESTURING (A/D EN PIJLTJES)
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+    if keys[pygame.K_a]:
         basket.x -= basket_speed
-    if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+    if keys[pygame.K_d]:
         basket.x += basket_speed
 
-    # Grenzen bewaken
     if basket.x < 0:
         basket.x = 0
     if basket.x > screen_width - basket.width:
         basket.x = screen_width - basket.width
 
+    # Logica van de vallende objecten
     spawn_timer += 1
     if spawn_timer >= spawn_delay:
         falling_objects.append(spawn_object(screen_width))
@@ -48,21 +49,25 @@ while running:
     for obj in falling_objects[:]:
         obj.update()
 
+        # Check voor botsing met mandje
         if obj.get_rect().colliderect(basket):
             falling_objects.remove(obj)
+        # Verwijder als het object de grond raakt
         elif obj.is_off_screen(screen_height):
             falling_objects.remove(obj)
 
-    screen.fill((0, 0, 0))
+    # TEKENEN
+    screen.fill((0, 0, 0)) # Zwarte achtergrond
 
-    # Mandje tekenen
-    pygame.draw.rect(screen, (139, 69, 19), basket)
-    pygame.draw.line(screen, (160, 82, 45), (basket.x, basket.y + 10), (basket.x + basket.width, basket.y + 10), 2)
-    pygame.draw.line(screen, (160, 82, 45), (basket.x, basket.y + 20), (basket.x + basket.width, basket.y + 20), 2)
+    pygame.draw.rect(screen, (255, 255, 255), basket)
 
+    # Teken de vallende objecten
     for obj in falling_objects:
         obj.draw(screen)
 
-    pygame.display.flip()
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(score_text, (20, 20))
+
+    pygame.display.update()
 
 pygame.quit()
