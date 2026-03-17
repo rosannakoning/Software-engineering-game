@@ -3,6 +3,13 @@ from objects import spawn_object
 
 pygame.init()
 
+## sounds 
+catch_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/fallingsounds.wav")
+catch_sound.set_volume(0.5)
+missing_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/error.wav")
+missing_sound.set_volume(0.8)
+
+
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -51,8 +58,10 @@ while running:
         obj.update()
 
         if obj.get_rect().colliderect(basket):
+            catch_sound.play()
             falling_objects.remove(obj)
         elif obj.is_off_screen(screen_height):
+            missing_sound.play()
             falling_objects.remove(obj)
 
     screen.fill((0, 0, 0))
