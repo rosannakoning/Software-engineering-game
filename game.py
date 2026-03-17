@@ -6,8 +6,16 @@ pygame.init()
 ## sounds 
 catch_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/fallingsounds.wav")
 catch_sound.set_volume(0.5)
+
 missing_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/error.wav")
 missing_sound.set_volume(0.8)
+
+start_sound = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/button.wav")
+start_sound.set_volume(0.5)
+
+background_song = pygame.mixer.Sound("/Users/romynguyen/Software-engineering-game/sounds/backgroundsong.wav")
+background_song.set_volume(0.05)
+
 
 
 screen_width = 800
@@ -26,9 +34,37 @@ spawn_delay = 40
 
 font = pygame.font.SysFont(None, 36)
 
+def start_screen(screen, font):
+    waiting = True
+
+    while waiting:
+        screen.fill((0, 0, 0))
+
+        title_text = font.render("Fruit Game", True, (255, 255, 255))
+        start_text = font.render("Press SPACE to Start", True, (200, 200, 200))
+
+        screen.blit(title_text, (300, 250))
+        screen.blit(start_text, (250, 300))
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    start_sound.play()
+                    waiting = False
+
+
+start_screen(screen, font)
+
 running = True
 while running:
     clock.tick(60)
+    background_song.play()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
