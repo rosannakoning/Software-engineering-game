@@ -3,7 +3,21 @@ from objects import spawn_object
 
 pygame.init()
 
-# Scherm instellingen
+## sounds 
+catch_sound = pygame.mixer.Sound("sounds/fallingsounds.wav")
+catch_sound.set_volume(0.5)
+
+missing_sound = pygame.mixer.Sound("sounds/error.wav")
+missing_sound.set_volume(0.8)
+
+start_sound = pygame.mixer.Sound("sounds/button.wav")
+start_sound.set_volume(0.5)
+
+background_song = pygame.mixer.Sound("sounds/backgroundsong.wav")
+background_song.set_volume(0.05)
+
+
+
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
