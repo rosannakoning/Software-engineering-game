@@ -6,7 +6,7 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Catch Game")
+pygame.display.set_caption("Fruit Catch Game")
 
 clock = pygame.time.Clock()
 
@@ -53,7 +53,10 @@ while running:
 
     screen.fill((0, 0, 0))
 
-    pygame.draw.rect(screen, (255, 255, 255), basket)
+    # mandje tekenen
+    pygame.draw.rect(screen, (139, 69, 19), basket)
+    pygame.draw.line(screen, (160, 82, 45), (basket.x, basket.y + 10), (basket.x + basket.width, basket.y + 10), 2)
+    pygame.draw.line(screen, (160, 82, 45), (basket.x, basket.y + 20), (basket.x + basket.width, basket.y + 20), 2)
 
     for obj in falling_objects:
         obj.draw(screen)
