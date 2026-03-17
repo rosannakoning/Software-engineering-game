@@ -25,6 +25,7 @@ pygame.display.set_caption("Fruit Catch Game")
 
 clock = pygame.time.Clock()
 
+# --- JOUW TAAK: DE SPELER ---
 basket = pygame.Rect(350, 530, 100, 40)
 basket_speed = 7
 
@@ -34,37 +35,9 @@ spawn_delay = 40
 
 font = pygame.font.SysFont(None, 36)
 
-def start_screen(screen, font):
-    waiting = True
-
-    while waiting:
-        screen.fill((0, 0, 0))
-
-        title_text = font.render("Fruit Game", True, (255, 255, 255))
-        start_text = font.render("Press SPACE to Start", True, (200, 200, 200))
-
-        screen.blit(title_text, (300, 250))
-        screen.blit(start_text, (250, 300))
-
-        pygame.display.flip()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    start_sound.play()
-                    waiting = False
-
-
-start_screen(screen, font)
-
 running = True
 while running:
     clock.tick(60)
-    background_song.play()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -81,6 +54,7 @@ while running:
     if basket.x > screen_width - basket.width:
         basket.x = screen_width - basket.width
 
+    # Logica van de vallende objecten
     spawn_timer += 1
     if spawn_timer >= spawn_delay:
         falling_objects.append(spawn_object(screen_width))
@@ -89,23 +63,25 @@ while running:
     for obj in falling_objects[:]:
         obj.update()
 
+        # Check voor botsing met mandje
         if obj.get_rect().colliderect(basket):
-            catch_sound.play()
             falling_objects.remove(obj)
+        # Verwijder als het object de grond raakt
         elif obj.is_off_screen(screen_height):
-            missing_sound.play()
             falling_objects.remove(obj)
 
-    screen.fill((0, 0, 0))
+    # TEKENEN
+    screen.fill((0, 0, 0)) # Zwarte achtergrond
 
-    # mandje tekenen
-    pygame.draw.rect(screen, (139, 69, 19), basket)
-    pygame.draw.line(screen, (160, 82, 45), (basket.x, basket.y + 10), (basket.x + basket.width, basket.y + 10), 2)
-    pygame.draw.line(screen, (160, 82, 45), (basket.x, basket.y + 20), (basket.x + basket.width, basket.y + 20), 2)
+    pygame.draw.rect(screen, (255, 255, 255), basket)
 
+    # Teken de vallende objecten
     for obj in falling_objects:
         obj.draw(screen)
 
-    pygame.display.flip()
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(score_text, (20, 20))
+
+    pygame.display.update()
 
 pygame.quit()
