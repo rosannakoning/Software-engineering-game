@@ -27,12 +27,16 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+    # --- BESTURING AANGEPAST VOOR PIJLTJES ---
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_a]:
+    # Nu werkt A én het linkerpijltje
+    if keys[pygame.K_a] or keys[pygame.K_LEFT]:
         basket.x -= basket_speed
-    if keys[pygame.K_d]:
+    # Nu werkt D én het rechterpijltje
+    if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
         basket.x += basket_speed
 
+    # Grenzen bewaken
     if basket.x < 0:
         basket.x = 0
     if basket.x > screen_width - basket.width:
