@@ -52,32 +52,51 @@ def draw_heart(screen, x, y, size=10):
     ]
     pygame.draw.polygon(screen, (255, 0, 0), points)
 
+
 def pause_menu(screen, font, big_font, score, background_song):
     paused = True
     sound_on = background_song.get_volume() > 0
 
-    # Buttons
+    # Knoppen
     restart_button = pygame.Rect(300, 200, 200, 50)
     continue_button = pygame.Rect(300, 270, 200, 50)
     sound_button = pygame.Rect(300, 340, 200, 50)
     score_button = pygame.Rect(300, 410, 200, 50)
 
+    button_color = (255, 165, 0)   # Oranje
+    hover_color = (255, 200, 50)   # Lichter bij hover
+    text_color = (255, 255, 255)   # Wit
+
     while paused:
-        screen.fill((50, 50, 50))  # menu background
+        screen.fill((135, 206, 235))  # Achtergrond
 
-        # Draw texts and buttons
-        screen.blit(big_font.render("PAUSED", True, (255, 0, 0)), (screen.get_width()//2 - 100, 100))
+        # Grote PAUSED tekst gecentreerd
+        paused_text = big_font.render("PAUSED", True, (255, 0, 0))
+        screen.blit(
+            paused_text,
+            (
+                screen.get_width() // 2 - paused_text.get_width() // 2,
+                100
+            )
+        )
 
+        # Hover-effect knoppen
+        mouse_x, mouse_y = pygame.mouse.get_pos()
         for rect in [restart_button, continue_button, sound_button, score_button]:
-            pygame.draw.rect(screen, (0, 200, 0), rect)
+            if rect.collidepoint(mouse_x, mouse_y):
+                pygame.draw.rect(screen, hover_color, rect, border_radius=10)
+            else:
+                pygame.draw.rect(screen, button_color, rect, border_radius=10)
 
-        screen.blit(font.render("Restart", True, (255, 255, 255)), (restart_button.x + 50, restart_button.y + 10))
-        screen.blit(font.render("Continue", True, (255, 255, 255)), (continue_button.x + 50, continue_button.y + 10))
-        screen.blit(font.render(f"Sound {'On' if sound_on else 'Off'}", True, (255, 255, 255)), (sound_button.x + 20, sound_button.y + 10))
-        screen.blit(font.render(f"Score: {score}", True, (255, 255, 255)), (score_button.x + 50, score_button.y + 10))
+        # Tekst op knoppen
+        screen.blit(font.render("Restart", True, text_color), (restart_button.x + 50, restart_button.y + 10))
+        screen.blit(font.render("Continue", True, text_color), (continue_button.x + 50, continue_button.y + 10))
+        screen.blit(font.render(f"Sound {'On' if sound_on else 'Off'}", True, text_color), (sound_button.x + 20, sound_button.y + 10))
+        screen.blit(font.render(f"Score: {score}", True, text_color), (score_button.x + 50, score_button.y + 10))
 
         pygame.display.update()
 
+        # Events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
