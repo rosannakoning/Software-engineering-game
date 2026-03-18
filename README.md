@@ -33,7 +33,7 @@ objects.py defines the FallingObject class and spawn logic.
 Pause menu buttons have hover effects and interactive sound toggle.
 
 ## Authors
-Rosanna Koning
+Rosanna Koning  
 Romy Nguyen
 Bo ???
 Hajar Hosaini
