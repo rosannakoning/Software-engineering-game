@@ -52,6 +52,48 @@ def draw_heart(screen, x, y, size=10):
     ]
     pygame.draw.polygon(screen, (255, 0, 0), points)
 
+def pause_menu(screen, font, big_font, score, background_song):
+    paused = True
+    sound_on = background_song.get_volume() > 0
+
+    # Buttons
+    restart_button = pygame.Rect(300, 200, 200, 50)
+    continue_button = pygame.Rect(300, 270, 200, 50)
+    sound_button = pygame.Rect(300, 340, 200, 50)
+    score_button = pygame.Rect(300, 410, 200, 50)
+
+    while paused:
+        screen.fill((50, 50, 50))  # menu background
+
+        # Draw texts and buttons
+        screen.blit(big_font.render("PAUSED", True, (255, 0, 0)), (screen.get_width()//2 - 100, 100))
+
+        for rect in [restart_button, continue_button, sound_button, score_button]:
+            pygame.draw.rect(screen, (0, 200, 0), rect)
+
+        screen.blit(font.render("Restart", True, (255, 255, 255)), (restart_button.x + 50, restart_button.y + 10))
+        screen.blit(font.render("Continue", True, (255, 255, 255)), (continue_button.x + 50, continue_button.y + 10))
+        screen.blit(font.render(f"Sound {'On' if sound_on else 'Off'}", True, (255, 255, 255)), (sound_button.x + 20, sound_button.y + 10))
+        screen.blit(font.render(f"Score: {score}", True, (255, 255, 255)), (score_button.x + 50, score_button.y + 10))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mx, my = event.pos
+                if restart_button.collidepoint(mx, my):
+                    return "restart", sound_on
+                elif continue_button.collidepoint(mx, my):
+                    return "continue", sound_on
+                elif sound_button.collidepoint(mx, my):
+                    sound_on = not sound_on
+                    if sound_on:
+                        background_song.set_volume(0.05)
+                    else:
+                        background_song.set_volume(0)
 
 # Start achtergrondmuziek
 background_song.play(-1)
@@ -83,6 +125,18 @@ while running:
             basket.x -= basket_speed
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             basket.x += basket_speed
+        
+        # Pause key
+        if keys[pygame.K_p]:
+            action, sound_on = pause_menu(screen, font, big_font, score, background_song)
+            if action == "restart":
+                basket.x = 350
+                falling_objects.clear()
+                spawn_timer = 0
+                score = 0
+                lives = 3
+                game_over = False
+            # continue = niets doen, terug naar game
 
         # Grenzen bewaken
         if basket.x < 0:
