@@ -18,6 +18,9 @@ start_sound.set_volume(0.5)
 background_song = pygame.mixer.Sound("sounds/backgroundsong.wav")
 background_song.set_volume(0.05)
 
+falling_bomb_sound = pygame.mixer.Sound("sounds/falling_bomb_sound.wav")
+falling_bomb_sound.set_volume(0.5)
+
 # Scherm instellingen
 screen_width = 800
 screen_height = 600
@@ -117,6 +120,7 @@ def pause_menu(screen, font, big_font, score, background_song):
 # Start achtergrondmuziek
 background_song.play(-1)
 
+
 running = True
 game_over = False
 
@@ -212,6 +216,7 @@ while running:
 
     # Game over scherm
     if game_over:
+        falling_bomb_sound.play() #speelt geluid wanneer gameover 
         game_over_text = big_font.render("GAME OVER", True, (255, 0, 0))
         restart_text = font.render("Druk op R om opnieuw te beginnen", True, (255, 255, 255))
         final_score_text = font.render(f"Eindscore: {score}", True, (255, 255, 255))
