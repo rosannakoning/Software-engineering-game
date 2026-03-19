@@ -3,7 +3,7 @@
 ## Introduction
 The game is a simple arcade-style game where the player moves a basket to catch falling fruits while avoiding bombs.  
 Every time the player catches a fruit the score goes up with one point.   
-If the player catches a bomb a hart is subtracted from the hearts.  
+If the player catches a bomb, there follows an explosion and a hart is subtracted from the hearts.  
 If the player lost all his lifes, it is game over.  
 The game features a pause menu with restart, continue, sound toggle, and score display.      
 
