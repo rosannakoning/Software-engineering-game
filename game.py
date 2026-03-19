@@ -22,6 +22,8 @@ background_song.set_volume(0.05)
 explosion_sound = pygame.mixer.Sound("sounds/falling_bomb.wav")
 explosion_sound.set_volume(0.7)
 
+
+
 # --- Display Settings ---
 screen_width = 800
 screen_height = 600
@@ -134,6 +136,41 @@ def draw_explosion(screen, x, y, num_particles=50):
 # Start Background Music
 background_song.play(-1)
 
+# Starting screen
+def start_screen(screen, font, basket, falling_objects):
+    waiting = True
+
+    while waiting:
+        screen.fill((135, 206, 235))  # zelfde achtergrond als game
+
+        # teken basket
+        pygame.draw.rect(screen, (139, 69, 19), basket)
+
+        # teken objecten
+        for obj in falling_objects:
+            obj.draw(screen)
+
+        title_text = font.render("Fruit Catch Game", True, (255, 255, 255))
+        start_text = font.render("Press SPACE to Start", True, (250, 250, 250))
+
+        screen.blit(title_text, (300, 250))
+        screen.blit(start_text, (275, 300))
+
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    start_sound.play()
+                    waiting = False
+
+#
+start_screen(screen, font, basket, falling_objects)
 
 running = True
 game_over = False
