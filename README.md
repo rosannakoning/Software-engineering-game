@@ -31,7 +31,8 @@ You start with 3 lives; the game ends when all lives are lost.
 Built with Python and pygame.  
 game.py contains the main game loop and pause menu.  
 objects.py defines the FallingObject class and spawn logic.  
-Pause menu buttons have hover effects and interactive sound toggle.  
+Pause menu buttons have hover effects and interactive sound toggle. 
+There are different sounds to indicate different situations.  
 
 ## Authors
 Rosanna Koning  
