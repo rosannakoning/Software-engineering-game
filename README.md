@@ -5,7 +5,7 @@ The game is a simple arcade-style game where the player moves a basket to catch 
 Every time the player catches a fruit the score goes up with one point.   
 If the player catches a bomb, there follows an explosion and a heart is subtracted from the hearts.  
 The player starts of with three hearts. If the player lost all his lifes, it is game over.  
-The game features a pause menu with restart, continue, sound toggle, and score display.      
+The game features a begin screen, pause menu with restart, continue, sound toggle, and score display.      
 
 ![alt text](image.png)  
 
@@ -17,6 +17,7 @@ pip install -r requirements.txt
 
 ## Play Instructions
 Use A / LEFT ARROW and D / RIGHT ARROW to move the basket.  
+Once opening the game, the start screen pops up. Follow the instructions on the screen to continue by pressing the space button you the keyboard. The game starts. 
 Press P to pause and open the pause menu.  
 In the pause menu:  
     Restart → restart the game  
