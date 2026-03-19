@@ -1,5 +1,7 @@
 import pygame
 from objects import spawn_object
+import random
+import math
 
 pygame.init()
 pygame.mixer.init()
@@ -16,6 +18,9 @@ start_sound.set_volume(0.5)
 
 background_song = pygame.mixer.Sound("sounds/backgroundsong.wav")
 background_song.set_volume(0.05)
+
+explosion_sound = pygame.mixer.Sound("sounds/explosion.wav")
+explosion_sound.set_volume(0.7)
 
 # --- Display Settings ---
 screen_width = 800
@@ -56,7 +61,7 @@ def pause_menu(screen, font, big_font, score, background_song):
     paused = True
     sound_on = background_song.get_volume() > 0
 
-    # Knoppen
+    # Buttons
     restart_button = pygame.Rect(300, 200, 200, 50)
     continue_button = pygame.Rect(300, 270, 200, 50)
     sound_button = pygame.Rect(300, 340, 200, 50)
@@ -69,7 +74,7 @@ def pause_menu(screen, font, big_font, score, background_song):
     while paused:
         screen.fill((135, 206, 235))  # Achtergrond
 
-        # Grote PAUSED tekst gecentreerd
+        # PAUSED Text
         paused_text = big_font.render("PAUSED", True, (255, 0, 0))
         screen.blit(
             paused_text,
@@ -112,6 +117,19 @@ def pause_menu(screen, font, big_font, score, background_song):
                         background_song.set_volume(0.05)
                     else:
                         background_song.set_volume(0)
+
+# --- Explosion ---
+def draw_explosion(screen, x, y, num_particles=50):
+    """Heftige explosie-effect met lijnen, geen rondje."""
+    for _ in range(num_particles):
+        length = random.randint(20, 60)           # lengte van elke vonk
+        angle = random.uniform(0, 2 * math.pi)    # richting willekeurig
+        end_x = x + int(length * math.cos(angle))
+        end_y = y + int(length * math.sin(angle))
+        # kleur varieert van geel → oranje → rood
+        color = (255, random.randint(150, 255), 0)
+        pygame.draw.line(screen, color, (x, y), (end_x, end_y), 3)
+
 
 # Start Background Music
 background_song.play(-1)
@@ -176,7 +194,10 @@ while running:
             if obj.get_rect().colliderect(basket):
                 if obj.type == "bomb":
                     lives -= 1
-                    missing_sound.play()
+                    explosion_sound.play()
+                    draw_explosion(screen, obj.x + obj.width//2, obj.y + obj.height//2, num_particles=70)
+                    pygame.display.update()
+                    pygame.time.delay(200)   # short pause
                     if lives <= 0:
                         game_over = True
                 else:
