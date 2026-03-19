@@ -19,8 +19,8 @@ start_sound.set_volume(0.5)
 background_song = pygame.mixer.Sound("sounds/backgroundsong.wav")
 background_song.set_volume(0.05)
 
-explosion_sound = pygame.mixer.Sound("sounds/explosion.wav")
-explosion_sound.set_volume(0.7)
+# explosion_sound = pygame.mixer.Sound("sounds/falling_bomb.wav")
+# explosion_sound.set_volume(0.7)
 
 # --- Display Settings ---
 screen_width = 800
