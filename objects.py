@@ -17,7 +17,7 @@ class FallingObject:
 
     def draw(self, screen):
         if self.type == "melon":
-            # watermeloen
+            # watermelon
             pygame.draw.circle(screen, (0, 180, 0), (self.x + 20, self.y + 20), 18)
             pygame.draw.circle(screen, (255, 60, 60), (self.x + 20, self.y + 20), 14)
             pygame.draw.circle(screen, (0, 0, 0), (self.x + 15, self.y + 18), 2)
@@ -25,24 +25,24 @@ class FallingObject:
             pygame.draw.circle(screen, (0, 0, 0), (self.x + 25, self.y + 18), 2)
 
         elif self.type == "banana":
-            # banaan
+            # banana
             pygame.draw.arc(screen, (255, 230, 0), (self.x + 5, self.y + 5, 30, 25), 0.5, 2.8, 6)
             pygame.draw.arc(screen, (255, 210, 0), (self.x + 8, self.y + 8, 24, 18), 0.5, 2.8, 4)
 
         elif self.type == "apple":
-            # appel
+            # apple
             pygame.draw.circle(screen, (220, 0, 0), (self.x + 20, self.y + 22), 14)
             pygame.draw.rect(screen, (120, 70, 20), (self.x + 18, self.y + 6, 4, 8))
             pygame.draw.ellipse(screen, (0, 180, 0), (self.x + 22, self.y + 7, 10, 6))
 
         elif self.type == "pear":
-            # peer
+            # pear
             pygame.draw.circle(screen, (100, 220, 80), (self.x + 20, self.y + 14), 10)
             pygame.draw.ellipse(screen, (100, 220, 80), (self.x + 10, self.y + 16, 20, 20))
             pygame.draw.rect(screen, (120, 70, 20), (self.x + 18, self.y + 3, 4, 7))
 
         elif self.type == "strawberry":
-            # aardbei
+            # strawberry
             pygame.draw.polygon(screen, (220, 0, 50), [
                 (self.x + 20, self.y + 38),
                 (self.x + 7, self.y + 16),
@@ -58,7 +58,7 @@ class FallingObject:
                 pygame.draw.circle(screen, (255, 230, 120), (self.x + seed_x, self.y + seed_y), 1)
 
         elif self.type == "bomb":
-            # bom
+            # bomb
             pygame.draw.circle(screen, (50, 50, 50), (self.x + 20, self.y + 22), 16)
             pygame.draw.rect(screen, (100, 100, 100), (self.x + 18, self.y + 6, 4, 8))
             pygame.draw.line(screen, (220, 220, 220), (self.x + 20, self.y + 6), (self.x + 28, self.y - 2), 2)

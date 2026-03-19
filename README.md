@@ -35,5 +35,5 @@ Pause menu buttons have hover effects and interactive sound toggle.
 ## Authors
 Rosanna Koning  
 Romy Nguyen  
-Bo ???  
+Bodiel Siebers  
 Hajar Hosaini  

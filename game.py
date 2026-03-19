@@ -1,11 +1,12 @@
 import pygame
 from objects import spawn_object
+import random
+import math
 
 pygame.init()
 pygame.mixer.init()
 
 # --- SOUNDS ---
-# Zorg dat deze bestanden in de map 'sounds' staan
 catch_sound = pygame.mixer.Sound("sounds/fallingsounds.wav")
 catch_sound.set_volume(0.5)
 
@@ -18,10 +19,10 @@ start_sound.set_volume(0.5)
 background_song = pygame.mixer.Sound("sounds/backgroundsong.wav")
 background_song.set_volume(0.05)
 
-falling_bomb_sound = pygame.mixer.Sound("sounds/falling_bomb_sound.wav")
-falling_bomb_sound.set_volume(0.5)
+explosion_sound = pygame.mixer.Sound("sounds/falling_bomb.wav")
+explosion_sound.set_volume(0.7)
 
-# Scherm instellingen
+# --- Display Settings ---
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -29,7 +30,7 @@ pygame.display.set_caption("Fruit Catch Game")
 
 clock = pygame.time.Clock()
 
-# --- VARIABELEN ---
+# --- VARIABLES ---
 basket = pygame.Rect(350, 530, 100, 40)
 basket_speed = 7
 
@@ -43,7 +44,7 @@ lives = 3
 font = pygame.font.SysFont(None, 36)
 big_font = pygame.font.SysFont(None, 72)
 
-
+# --- LIFES --- 
 def draw_heart(screen, x, y, size=10):
     pygame.draw.circle(screen, (255, 0, 0), (x, y), size)
     pygame.draw.circle(screen, (255, 0, 0), (x + size, y), size)
@@ -55,25 +56,25 @@ def draw_heart(screen, x, y, size=10):
     ]
     pygame.draw.polygon(screen, (255, 0, 0), points)
 
-
+# --- Pause Menu ---
 def pause_menu(screen, font, big_font, score, background_song):
     paused = True
     sound_on = background_song.get_volume() > 0
 
-    # Knoppen
+    # Buttons
     restart_button = pygame.Rect(300, 200, 200, 50)
     continue_button = pygame.Rect(300, 270, 200, 50)
     sound_button = pygame.Rect(300, 340, 200, 50)
     score_button = pygame.Rect(300, 410, 200, 50)
 
-    button_color = (255, 165, 0)   # Oranje
-    hover_color = (255, 200, 50)   # Lichter bij hover
-    text_color = (255, 255, 255)   # Wit
+    button_color = (255, 165, 0)   # Orange
+    hover_color = (255, 200, 50)   # Lighter with hover
+    text_color = (255, 255, 255)   # White
 
     while paused:
         screen.fill((135, 206, 235))  # Achtergrond
 
-        # Grote PAUSED tekst gecentreerd
+        # PAUSED Text
         paused_text = big_font.render("PAUSED", True, (255, 0, 0))
         screen.blit(
             paused_text,
@@ -83,7 +84,7 @@ def pause_menu(screen, font, big_font, score, background_song):
             )
         )
 
-        # Hover-effect knoppen
+        # Hover buttons
         mouse_x, mouse_y = pygame.mouse.get_pos()
         for rect in [restart_button, continue_button, sound_button, score_button]:
             if rect.collidepoint(mouse_x, mouse_y):
@@ -91,7 +92,7 @@ def pause_menu(screen, font, big_font, score, background_song):
             else:
                 pygame.draw.rect(screen, button_color, rect, border_radius=10)
 
-        # Tekst op knoppen
+        # Text buttons
         screen.blit(font.render("Restart", True, text_color), (restart_button.x + 50, restart_button.y + 10))
         screen.blit(font.render("Continue", True, text_color), (continue_button.x + 50, continue_button.y + 10))
         screen.blit(font.render(f"Sound {'On' if sound_on else 'Off'}", True, text_color), (sound_button.x + 20, sound_button.y + 10))
@@ -117,7 +118,20 @@ def pause_menu(screen, font, big_font, score, background_song):
                     else:
                         background_song.set_volume(0)
 
-# Start achtergrondmuziek
+# --- Explosion ---
+def draw_explosion(screen, x, y, num_particles=50):
+    """Heftige explosie-effect met lijnen, geen rondje."""
+    for _ in range(num_particles):
+        length = random.randint(20, 60)           # lengte van elke vonk
+        angle = random.uniform(0, 2 * math.pi)    # richting willekeurig
+        end_x = x + int(length * math.cos(angle))
+        end_y = y + int(length * math.sin(angle))
+        # kleur varieert van geel → oranje → rood
+        color = (255, random.randint(150, 255), 0)
+        pygame.draw.line(screen, color, (x, y), (end_x, end_y), 3)
+
+
+# Start Background Music
 background_song.play(-1)
 
 
@@ -142,7 +156,7 @@ while running:
                 game_over = False
 
     if not game_over:
-        # Besturing
+        # Control
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             basket.x -= basket_speed
@@ -159,29 +173,32 @@ while running:
                 score = 0
                 lives = 3
                 game_over = False
-            # continue = niets doen, terug naar game
+            
 
-        # Grenzen bewaken
+        # Boundaries
         if basket.x < 0:
             basket.x = 0
         if basket.x > screen_width - basket.width:
             basket.x = screen_width - basket.width
 
-        # Nieuwe objecten spawnen
+        # New Objects 
         spawn_timer += 1
         if spawn_timer >= spawn_delay:
             falling_objects.append(spawn_object(screen_width))
             spawn_timer = 0
 
-        # Objecten updaten
+        # Objects Updating
         for obj in falling_objects[:]:
             obj.update()
 
-            # Botsing met mandje
+            # Touching Basket
             if obj.get_rect().colliderect(basket):
                 if obj.type == "bomb":
                     lives -= 1
-                    missing_sound.play()
+                    explosion_sound.play()
+                    draw_explosion(screen, obj.x + obj.width//2, obj.y + obj.height//2, num_particles=70)
+                    pygame.display.update()
+                    pygame.time.delay(200)   # short pause
                     if lives <= 0:
                         game_over = True
                 else:
@@ -190,33 +207,33 @@ while running:
 
                 falling_objects.remove(obj)
 
-            # Object gemist
+            # Missed Objects
             elif obj.is_off_screen(screen_height):
                 if obj.type != "bomb":
                     missing_sound.play()
                 falling_objects.remove(obj)
 
-    # --- TEKENEN ---
-    screen.fill((135, 206, 235))  # blauwe lucht
+    # --- Drawing ---
+    screen.fill((135, 206, 235))  # blue sky
 
-    # Mandje
+    # Basket
     pygame.draw.rect(screen, (139, 69, 19), basket)
 
-    # Vallende objecten
+    # Falling objects
     for obj in falling_objects:
         obj.draw(screen)
 
-    # Score linksboven
+    # Score left corner
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     screen.blit(score_text, (20, 20))
 
-    # Hartjes rechtsboven
+    # Harts right corner
     for i in range(lives):
         draw_heart(screen, screen_width - 80 - (i * 50), 30, 10)
 
-    # Game over scherm
+    # Game Over screen
     if game_over:
-        falling_bomb_sound.play() #speelt geluid wanneer gameover 
+        explosion_sound.play() #speelt geluid wanneer gameover 
         game_over_text = big_font.render("GAME OVER", True, (255, 0, 0))
         restart_text = font.render("Druk op R om opnieuw te beginnen", True, (255, 255, 255))
         final_score_text = font.render(f"Eindscore: {score}", True, (255, 255, 255))
